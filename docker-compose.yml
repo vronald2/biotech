@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "8080:80"
+
+        volumes:
+            - ./:/projectroot
+            - ./site.conf:/etc/nginx/conf.d/site.conf
+        links:
+            - php
+
+    php:
+        build:
+          context: ./
+          dockerfile: Dockerfile
+        expose:
+          - 9000
+
+        volumes:
+          - ./:/projectroot
+        links:
+          - db
+    db:
+        image: mysql:5.7
+        container_name: "${APP_NAME}_mysql"
+
+        volumes:
+            - ./db/:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+            MYSQL_DATABASE: $DB_DATABASE
+
+    pma:
+        image: phpmyadmin/phpmyadmin
+        container_name: "${APP_NAME}_pma"
+        environment:
+            PMA_HOST: $DB_HOST
+        ports:
+            - 8081:80
