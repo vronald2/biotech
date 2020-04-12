@@ -2,8 +2,10 @@
 
 @section('content')
     <div class="container">
-        <a class="btn btn-primary float-right" href="{{ action('ProductController@create') }}" role="button">Új termék</a>
-        <div>{{ $products->links() }}</div>
+
+            <a class="btn btn-primary float-right mb-3" href="{{ action('ProductController@create') }}" role="button">Új termék</a>
+            <div>{{ $products->links() }}</div>
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -40,7 +42,7 @@
                         <form class="custom-control-inline" action="{{ URL::route('product.destroy', $product->id) }}" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <b-button type="submit" size="sm" variant="danger">Törlés</b-button>
+                            <b-button type="submit" onclick="confirm('Biztosan törlöd?');"  size="sm" variant="danger">Törlés</b-button>
                         </form>
                     </td>
                 </tr>
